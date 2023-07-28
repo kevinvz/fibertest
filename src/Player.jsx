@@ -1,6 +1,6 @@
 import { Suspense, useMemo, useRef } from 'react'
 import { Vector3, Euler, Quaternion, Matrix4 } from 'three'
-import Eve from './Eve'
+import Ship from './Ship'
 import { useCompoundBody, useContactMaterial } from '@react-three/cannon'
 import useKeyboard from './useKeyboard'
 import { useFrame } from '@react-three/fiber'
@@ -47,13 +47,6 @@ export default function PlayerCollider({ position }) {
         if (e.contact.bi.id !== e.body.id) {
           contactNormal.set(...e.contact.ni)
         }
-        if (contactNormal.dot(down) > 0.5) {
-          if (inJumpAction.current) {
-            inJumpAction.current = false
-            actions['jump'].fadeOut(0.1)
-            actions['idle'].reset().fadeIn(0.1).play()
-          }
-        }
       },
       material: 'slippery',
       linearDamping: 0,
@@ -63,7 +56,7 @@ export default function PlayerCollider({ position }) {
   )
 
   useFrame(({ raycaster }, delta) => {
-    let activeAction = 0 // 0:idle, 1:walking, 2:jumping
+    let activeAction = 1 // 0:idle, 1:walking, 2:jumping
     // console.log('ship position: ', worldPosition)
     body.angularFactor.set(0, 0, 0)
 
@@ -100,50 +93,21 @@ export default function PlayerCollider({ position }) {
       inputVelocity.set(0, 0, 0)
       if (playerGrounded.current) {
         if (keyboard['KeyW']) {
-          activeAction = 1
           inputVelocity.z = -10 * delta
         }
         if (keyboard['KeyS']) {
-          activeAction = 1
           inputVelocity.z = 10 * delta
         }
         if (keyboard['KeyA']) {
-          activeAction = 1
           inputVelocity.x = -10 * delta
         }
         if (keyboard['KeyD']) {
-          activeAction = 1
           inputVelocity.x = 10 * delta
         }
       }
       inputVelocity.setLength(0.01) // clamps walking speed
 
-      if (activeAction !== prevActiveAction.current) {
-        //console.log('active action changed')
-        if (prevActiveAction.current !== 1 && activeAction === 1) {
-          //console.log('idle --> walking')
-          actions['idle'].fadeOut(0.1)
-          actions['walk'].reset().fadeIn(0.1).play()
-        }
-        if (prevActiveAction.current !== 0 && activeAction === 0) {
-          //console.log('walking --> idle')
-          actions['walk'].fadeOut(0.1)
-          actions['idle'].reset().fadeIn(0.1).play()
-        }
-        prevActiveAction.current = activeAction
-      }
-
-      // if (keyboard['Space']) {
-      //   if (playerGrounded.current && !inJumpAction.current) {
-      //     console.log('jump')
-      //     activeAction = 2
-      //     inJumpAction.current = true
-      //     actions['walk'].fadeOut(0.1)
-      //     actions['idle'].fadeOut(0.1)
-      //     actions['jump'].reset().fadeIn(0.1).play()
-      //     inputVelocity.y = 6
-      //   }
-      // }
+     
 
       euler.y = pivot.rotation.y
       euler.order = 'YZX'
@@ -152,12 +116,6 @@ export default function PlayerCollider({ position }) {
       velocity.set(inputVelocity.x, inputVelocity.y, inputVelocity.z)
 
       body.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
-    }
-
-    if (activeAction === 1) {
-      mixer.update(delta * distance * 22.5)
-    } else {
-      mixer.update(delta)
     }
 
     group.current.position.lerp(worldPosition, 0.3)
@@ -169,7 +127,7 @@ export default function PlayerCollider({ position }) {
     <>
       <group ref={group} position={position}>
         <Suspense fallback={null}>
-          <Eve />
+          <Ship />
         </Suspense>
       </group>
     </>
