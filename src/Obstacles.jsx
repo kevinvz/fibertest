@@ -2,13 +2,15 @@ import { useEffect, useRef } from 'react'
 import { useBox } from '@react-three/cannon'
 import { useStore } from './Game'
 
-const obstacles = [...Array(50)].map((_, i) => ({
-  position: [(Math.random() - 0.5) * 25, 2 * i, (Math.random() - 0.5) * 25],
-  args: [Math.random() * 10, Math.random() * 2, Math.random() * 5]
-}))
+// const obstacles = [...Array(50)].map((_, i) => ({
+//   position: [(Math.random() - 0.5) * 25, 2 * i, (Math.random() - 0.5) * 25],
+//   args: [Math.random() * 10, Math.random() * 2, Math.random() * 5]
+// }))
+
+const obstacles = [{args: [35,20,40], position: [49, 2, 0]}]
 
 function Obstacle({ args, position, ...props }) {
-  const [ref] = useBox(() => ({ args, mass: 1, position: position, ...props }), useRef())
+  const [ref] = useBox(() => ({ args, mass: 0, position: position, ...props }), useRef())
 
   const groundObjects = useStore((state) => state.groundObjects)
 
@@ -21,9 +23,9 @@ function Obstacle({ args, position, ...props }) {
   }, [groundObjects, ref])
 
   return (
-    <mesh ref={ref} castShadow receiveShadow>
+    <mesh ref={ref}>
       <boxGeometry args={[...args]} />
-      <meshStandardMaterial />
+      <meshStandardMaterial transparent opacity={0}/>
     </mesh>
   )
 }

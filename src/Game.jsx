@@ -22,9 +22,9 @@ export default function Game() {
   return (
     <>
       <ToggleDebug>
-        <Floor  />
         <Obstacles />
-        <Player position={[0, 1, 0]} />
+        <Floor opacity={0} />
+        <Player position={[0, 0, 0]} />
       </ToggleDebug>
     </>
   )

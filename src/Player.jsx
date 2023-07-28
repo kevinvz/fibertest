@@ -31,8 +31,8 @@ export default function PlayerCollider({ position }) {
   useContactMaterial('ground', 'slippery', {
     friction: 0,
     restitution: 0.01,
-    contactEquationStiffness: 1e8,
-    contactEquationRelaxation: 3
+    contactEquationStiffness: 1e7,
+    contactEquationRelaxation: 3,
   })
 
   const [ref, body] = useCompoundBody(
@@ -64,7 +64,7 @@ export default function PlayerCollider({ position }) {
 
   useFrame(({ raycaster }, delta) => {
     let activeAction = 0 // 0:idle, 1:walking, 2:jumping
-
+    // console.log('ship position: ', worldPosition)
     body.angularFactor.set(0, 0, 0)
 
     ref.current.getWorldPosition(worldPosition)
@@ -83,7 +83,7 @@ export default function PlayerCollider({ position }) {
       //console.log('in air')
       body.linearDamping.set(0)
     } else {
-      body.linearDamping.set(0.9999999)
+      body.linearDamping.set(0.1)
     }
 
     const distance = worldPosition.distanceTo(group.current.position)
@@ -116,7 +116,7 @@ export default function PlayerCollider({ position }) {
           inputVelocity.x = 10 * delta
         }
       }
-      inputVelocity.setLength(0.7) // clamps walking speed
+      inputVelocity.setLength(0.01) // clamps walking speed
 
       if (activeAction !== prevActiveAction.current) {
         //console.log('active action changed')
@@ -133,17 +133,17 @@ export default function PlayerCollider({ position }) {
         prevActiveAction.current = activeAction
       }
 
-      if (keyboard['Space']) {
-        if (playerGrounded.current && !inJumpAction.current) {
-          console.log('jump')
-          activeAction = 2
-          inJumpAction.current = true
-          actions['walk'].fadeOut(0.1)
-          actions['idle'].fadeOut(0.1)
-          actions['jump'].reset().fadeIn(0.1).play()
-          inputVelocity.y = 6
-        }
-      }
+      // if (keyboard['Space']) {
+      //   if (playerGrounded.current && !inJumpAction.current) {
+      //     console.log('jump')
+      //     activeAction = 2
+      //     inJumpAction.current = true
+      //     actions['walk'].fadeOut(0.1)
+      //     actions['idle'].fadeOut(0.1)
+      //     actions['jump'].reset().fadeIn(0.1).play()
+      //     inputVelocity.y = 6
+      //   }
+      // }
 
       euler.y = pivot.rotation.y
       euler.order = 'YZX'
