@@ -8,19 +8,20 @@ export default function useFollowCam() {
   const pivot = useMemo(() => new Object3D(), [])
   const followCam = useMemo(() => {
     const o = new Object3D()
-    o.position.set(0, 10 , 1.5)
+    o.position.set(0, 20, 5.5)
     return o
   }, [])
 
   const onDocumentMouseMove = (e) => {
+    
     if (document.pointerLockElement) {
       pivot.rotation.y -= e.movementX * 0.002
       const v = followCam.rotation.x - e.movementY * 0.002
-      if (v >= -2.0 && v <= 0.4 && followCam.rotation.x >= -0.35) {
+      console.log('rotationX : ', followCam.rotation.x)
+      if (v >= -1.0 && v <= 0) {
         followCam.rotation.x = v
+        followCam.position.y = -v * followCam.position.z + 3
       }
-      // console.log('follow cam rot x :', followCam.rotation.x)
-      // console.log('follow cam poz y :', followCam.position.y)
     }
     return false
   }
@@ -31,7 +32,6 @@ export default function useFollowCam() {
       if (v >= 0.5 && v <= 4) {
         followCam.position.z = v
       }
-      console.log('follow cam poz z :', followCam.position.z)
     }
     return false
   }
@@ -41,13 +41,9 @@ export default function useFollowCam() {
     followCam.add(camera)
     pivot.add(followCam)
     scene.add(pivot)
-    followCam.position.z = 6
-    // followCam.rotation.x = -0.3
-    followCam.position.y = 5
     //console.log('attach followCam listeners')
     document.addEventListener('mousemove', onDocumentMouseMove)
-    // document.addEventListener('mousewheel', onDocumentMouseWheel)
-    //console.log(followCam)
+    document.addEventListener('mousewheel', onDocumentMouseWheel)
     return () => {
       //console.log('remove followCam listeners')
       document.removeEventListener('mousemove', onDocumentMouseMove)

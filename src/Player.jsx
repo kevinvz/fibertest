@@ -123,6 +123,8 @@ export default function PlayerCollider({ position }) {
     pivot.position.lerp(worldPosition, 0.1)
   })
 
+  console.log('%cShip : ', 'color:magenta;background:cyan;', Ship)
+
   return (
     <>
       <group ref={group} position={position}>
