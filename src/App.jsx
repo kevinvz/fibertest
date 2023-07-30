@@ -14,13 +14,7 @@ function Loader() {
 export default function App() {
   return (
     <>
-      <div id="instructions">
-        WASD to move
-        <br />
-        SPACE to jump.
-        <br />
-       
-      </div>
+      <h1 style={{ backgroundColor: 'rgba(0,0,0,0.4)', margin:0, position:'absolute', top:0, height:50, zIndex: 1, display: 'flex', width: '100%' }}>CallMeKevTheDev</h1>
       <Canvas shadows onPointerDown={(e) => e.target.requestPointerLock()}>
         <Shanty />
         <AmbientSound />

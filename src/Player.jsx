@@ -1,6 +1,6 @@
 import { Suspense, useMemo, useRef } from 'react'
 import { Vector3, Euler, Quaternion, Matrix4 } from 'three'
-import Ship from './Ship'
+import Ship2 from './Ship2'
 import { useCompoundBody, useContactMaterial } from '@react-three/cannon'
 import useKeyboard from './useKeyboard'
 import { useFrame } from '@react-three/fiber'
@@ -123,13 +123,13 @@ export default function PlayerCollider({ position }) {
     pivot.position.lerp(worldPosition, 0.1)
   })
 
-  console.log('%cShip : ', 'color:magenta;background:cyan;', Ship)
+  console.log('%cShip : ', 'color:magenta;background:cyan;', Ship2)
 
   return (
     <>
       <group ref={group} position={position}>
         <Suspense fallback={null}>
-          <Ship />
+          <Ship2 />
         </Suspense>
       </group>
     </>
