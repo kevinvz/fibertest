@@ -13,12 +13,12 @@ export default function Floor() {
   const textureSea = useLoader(TextureLoader, './img/water2.jpg')
   textureSea.wrapS = THREE.RepeatWrapping
   textureSea.wrapT = THREE.RepeatWrapping
-  textureSea.repeat.x = 300
-  textureSea.repeat.y = 300
+  textureSea.repeat.x = 150
+  textureSea.repeat.y = 150
   const compassTexture = useLoader(TextureLoader, './img/compass.png')
   const groundObjects = useStore((state) => state.groundObjects)
   const sea = useGLTF('./models/sea2.glb')
-  const island = useGLTF('./models/test-island.glb')
+  const island = useGLTF('./models/volcano.glb')
   island.material = 'ground'
   console.log('island', island)
   console.log('sea', sea)
@@ -51,9 +51,12 @@ export default function Floor() {
       </mesh>
      
       </group>
-    <mesh name="island" frustumCulled={false} geometry={island.nodes.Icosphere.geometry} position={[60,2,0]} scale={3} receiveShadow>
-      <meshPhysicalMaterial color={0x0cc0000} />
-    </mesh>
+      {island.scene.children.map((child, index) => (
+          <primitive object={island.scene} scale={2.5} position={[30,2,30]}>
+            <meshPhysicalMaterial emissiveIntensity={1} emissive={0xffffff}/>
+          </primitive>  
+          
+        ))}
     
     <mesh position={[0, 2.05, 0]} rotation= {[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[15, 15]} />

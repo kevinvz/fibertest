@@ -28,7 +28,7 @@ export default function useFollowCam() {
   const onDocumentMouseWheel = (e) => {
     if (document.pointerLockElement) {
       const v = followCam.position.z + e.deltaY * 0.002
-      if (v >= 0.5 && v <= 4) {
+      if (v >= 2 && v <= 20) {
         followCam.position.z = v
       }
     }

@@ -5,6 +5,7 @@ import Player from './Player'
 import { useControls } from 'leva'
 import { create } from 'zustand'
 import { AnimationMixer } from 'three'
+import ParticleEmitter from './ParticleEmitter'
 
 export const useStore = create(() => ({
   groundObjects: {},
@@ -22,7 +23,8 @@ export default function Game() {
   return (
     <>
       <ToggleDebug>
-        <Obstacles />
+        {/* <Obstacles /> */}
+        <ParticleEmitter />
         <Floor opacity={0} />
         <Player position={[0, 0, 0]} />
       </ToggleDebug>
